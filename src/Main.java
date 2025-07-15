@@ -71,6 +71,7 @@ public class Main {
 
         String line = reader.readLine();
 
+        //TODO NOW: DELETE METHOD - Same as GET Method
         if(isGetMethod(line)) {
             System.out.println("Method: " + method);
             System.out.println("Path: " + path);
