@@ -20,14 +20,19 @@ public class ConnectionHandler {
         switch (httpRequest.getMethod()) {
             case "GET":
                 handleGET(httpRequest);
+                break;
             case "DELETE":
                 //TODO: handleDelete();
+                break;
             case "POST":
                 //TODO: handlePost();
+                break;
             case "PUT":
                 //TODO: handlePut();
+                break;
             default:
                 System.out.println("Unsupported HTTP request! Method" + httpRequest.getMethod() + " Path: " + httpRequest.getPath());
+                break;
         }
     }
 
