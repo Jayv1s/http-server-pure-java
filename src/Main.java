@@ -1,4 +1,3 @@
-import server.HttpServer;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -58,8 +57,74 @@ public class Main {
 
     * GET on port 8080 using cURL:  curl http://localhost:8080/ (the Header "host" is automatically add by cURL - but if need to add manually: curl http://localhost:8080/ -H "Host: localhost:8080"
     * */
+    public static String method;
+    public static String path;
+    public static String protocol;
+
+    public static void startServer() throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8080);
+        Socket clientSocket = serverSocket.accept();
+
+        InputStream inputStream = clientSocket.getInputStream();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        String line = reader.readLine();
+
+        if(isGetMethod(line)) {
+            System.out.println("Method: " + method);
+            System.out.println("Path: " + path);
+            System.out.println("Protocol: " + protocol);
+
+            while((line = reader.readLine()) != null &&  !line.isEmpty()) {
+                System.out.println("Ignoring header: " + line);
+            }
+
+            String response = buildResponse();
+
+            try(OutputStream outputStream = clientSocket.getOutputStream()) {
+                outputStream.write(response.getBytes());
+                outputStream.flush();
+            }
+
+        } else {
+            System.out.println("Unsupported HTTP request!" + line);
+        }
+    }
+
+    public static String buildResponse() {
+        String body = "Hello from Java server"; //Doing body.length will return ONLY THE NUMBERS OF CHAR considering UTF-16
+        int utf8Length = body.getBytes(StandardCharsets.UTF_8).length; //Here we are converting body to bytes already using UTF-8, the size of this array of bytes represents my content-length;
+        return "HTTP/1.1 200 OK\r\n" +
+                "Content-Type: text/plain\r\n" +
+                "Content-Length: " + utf8Length + "\r\n" +
+                "Connection: close\r\n" +
+                "\r\n" +
+                body;
+    }
+
+    public static boolean isGetMethod(String firstLine) {
+        if(firstLine == null) {
+            return false;
+        }
+
+        String[] firstLineSplitted = firstLine.split(" ");
+
+        //Basic firstLine is composed of METHOD - PATH - PROTOCOL
+        if(firstLineSplitted.length < 3) {
+            return false;
+        }
+
+        method = firstLineSplitted[0];
+        path = firstLineSplitted[1];
+        protocol = firstLineSplitted[2];
+
+        return Objects.equals(firstLineSplitted[0], "GET");
+    }
+
+
     public static void main(String[] args) throws IOException {
-        HttpServer.startServer();
+        startServer();
         System.out.println("Hello, World!");
     }
 }
