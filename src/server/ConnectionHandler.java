@@ -28,7 +28,7 @@ public class ConnectionHandler {
                 handlePOST(httpRequest);
                 break;
             case "PUT":
-                //TODO: handlePut();
+                handlePUT(httpRequest);
                 break;
             default:
                 System.out.println("Unsupported HTTP request! Method" + httpRequest.getMethod() + " Path: " + httpRequest.getPath());
@@ -43,15 +43,29 @@ public class ConnectionHandler {
         }
     }
 
+    public void handlePUT(HttpRequest httpRequest) throws IOException {
+        System.out.println("Method: " + httpRequest.getMethod());
+        System.out.println("Path: " + httpRequest.getPath());
+        System.out.println("Protocol: " + httpRequest.getProtocol());
+        System.out.println("Body:" + httpRequest.getBody());
+
+        String body = String.format("Body %s MODIFIED!", httpRequest.getBody());
+
+        HttpResponse response = new HttpResponse().build200ResponseWithBody(body);
+
+        try(OutputStream outputStream = clientSocket.getOutputStream()) {
+            outputStream.write(response.getResponse().getBytes());
+            outputStream.flush();
+        }
+    }
+
     public void handlePOST(HttpRequest httpRequest) throws IOException {
         System.out.println("Method: " + httpRequest.getMethod());
         System.out.println("Path: " + httpRequest.getPath());
         System.out.println("Protocol: " + httpRequest.getProtocol());
         System.out.println("Body:" + httpRequest.getBody());
 
-        String body = "Hello " + httpRequest.getBody();
-
-        HttpResponse response = new HttpResponse().build200ResponseWithBody(body);
+        HttpResponse response = new HttpResponse().build200ResponseWithBody(httpRequest.getBody());
 
         try(OutputStream outputStream = clientSocket.getOutputStream()) {
             outputStream.write(response.getResponse().getBytes());
