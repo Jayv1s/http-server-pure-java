@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class HttpRequest {
     public String method;
     public String path;
     public String protocol;
-    public List<String> headers;
+    public HashMap<String, String> headers;
+    public String body;
 
     public HttpRequest() {
-        headers = new ArrayList<>();
+        headers = new HashMap<>();
     }
 
     public HttpRequest getRequestData(Socket clientSocket) throws IOException {
@@ -39,8 +39,20 @@ public class HttpRequest {
         this.path = firstLineSplitted[1];
         this.protocol = firstLineSplitted[2];
 
-        while((line = reader.readLine()) != null &&  !line.isEmpty()) {
-            headers.add(line);
+        while((line = reader.readLine()) != null && !line.isEmpty()) {
+            String[] headerLine = line.split(":", 2);
+
+            headers.put(headerLine[0], headerLine[1]);
+        }
+
+        if(headers.containsKey("Content-Length")) {
+            int contentLength = Integer.parseInt(headers.get("Content-Length").trim());
+
+            char[] readBody =  new char[contentLength];
+
+            reader.read(readBody, 0, contentLength);
+
+            this.body = new String(readBody);
         }
 
         return this;
@@ -56,5 +68,9 @@ public class HttpRequest {
 
     public String getProtocol() {
         return this.protocol;
+    }
+
+    public String getBody() {
+        return this.body;
     }
 }

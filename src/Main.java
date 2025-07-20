@@ -37,6 +37,17 @@ public class Main {
                         "Connection: close\r\n" +
                         "\r\n" +
                         body;
+    *ALSO VALID:
+    *         String body = "Hello from Java server";
+              return """
+                HTTP/1.1 200 OK \r
+                Content-Type: text/plain \r
+                Content-Length: 22 \r
+                Connection: close \r
+                \r
+                Hello from Java server\r
+                \r
+              """
     *
     * HTTP Request look like this:
         METHOD PATH HTTP/VERSION  (example: GET /index.txt HTTP/1.1)    ← first line, mandatory

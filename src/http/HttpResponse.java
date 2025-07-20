@@ -9,8 +9,7 @@ public class HttpResponse {
         this.response = null;
     }
 
-    public HttpResponse buildResponse() {
-        String body = "Hello from Java server"; //Doing body.length will return ONLY THE NUMBERS OF CHAR considering UTF-16
+    public HttpResponse build200ResponseWithBody(String body) {
         int utf8Length = body.getBytes(StandardCharsets.UTF_8).length; //Here we are converting body to bytes already using UTF-8, the size of this array of bytes represents my content-length;
         this.response = "HTTP/1.1 200 OK\r\n" +
                 "Content-Type: text/plain\r\n" +
@@ -18,6 +17,31 @@ public class HttpResponse {
                 "Connection: close\r\n" +
                 "\r\n" +
                 body;
+
+        return this;
+    }
+
+    public HttpResponse build202Response() {
+        this.response = """
+                HTTP/1.1 204 No Content\r
+                Content-Type: text/plain\r
+                Content-Length: 0\r
+                Connection: close\r
+                \r
+                """;
+
+        return this;
+    }
+
+    public HttpResponse build404Response() {
+        String defaultNotFoundMessage = "URL / Path not found!";
+        int length = defaultNotFoundMessage.getBytes(StandardCharsets.UTF_8).length;
+        this.response = "HTTP/1.1 404 Not Found\r\n" +
+                "Content-Type: text/plain\r\n" +
+                "Content-Length: " + length + "\r\n" +
+                "Connection: close\r\n" +
+                "\r\n" +
+                defaultNotFoundMessage;
 
         return this;
     }

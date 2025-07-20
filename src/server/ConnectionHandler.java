@@ -22,17 +22,40 @@ public class ConnectionHandler {
                 handleGET(httpRequest);
                 break;
             case "DELETE":
-                //TODO: handleDelete();
+                handleDELETE(httpRequest);
                 break;
             case "POST":
-                //TODO: handlePost();
+                handlePOST(httpRequest);
                 break;
             case "PUT":
                 //TODO: handlePut();
                 break;
             default:
                 System.out.println("Unsupported HTTP request! Method" + httpRequest.getMethod() + " Path: " + httpRequest.getPath());
+                HttpResponse response = new HttpResponse().build404Response();
+
+                try(OutputStream outputStream = clientSocket.getOutputStream()) {
+                    outputStream.write(response.getResponse().getBytes());
+                    outputStream.flush();
+                }
+
                 break;
+        }
+    }
+
+    public void handlePOST(HttpRequest httpRequest) throws IOException {
+        System.out.println("Method: " + httpRequest.getMethod());
+        System.out.println("Path: " + httpRequest.getPath());
+        System.out.println("Protocol: " + httpRequest.getProtocol());
+        System.out.println("Body:" + httpRequest.getBody());
+
+        String body = "Hello " + httpRequest.getBody();
+
+        HttpResponse response = new HttpResponse().build200ResponseWithBody(body);
+
+        try(OutputStream outputStream = clientSocket.getOutputStream()) {
+            outputStream.write(response.getResponse().getBytes());
+            outputStream.flush();
         }
     }
 
@@ -41,7 +64,23 @@ public class ConnectionHandler {
         System.out.println("Path: " + httpRequest.getPath());
         System.out.println("Protocol: " + httpRequest.getProtocol());
 
-        HttpResponse response = new HttpResponse().buildResponse();
+        String body = "Hello from Java server"; //Doing body.length will return ONLY THE NUMBERS OF CHAR considering UTF-16
+
+        HttpResponse response = new HttpResponse().build200ResponseWithBody(body);
+
+        try(OutputStream outputStream = clientSocket.getOutputStream()) {
+            outputStream.write(response.getResponse().getBytes());
+            outputStream.flush();
+        }
+    }
+
+    public void handleDELETE(HttpRequest httpRequest) throws IOException {
+        System.out.println("Method: " + httpRequest.getMethod());
+        System.out.println("Path: " + httpRequest.getPath());
+        System.out.println("Protocol: " + httpRequest.getProtocol());
+
+
+        HttpResponse response = new HttpResponse().build202Response();
 
         try(OutputStream outputStream = clientSocket.getOutputStream()) {
             outputStream.write(response.getResponse().getBytes());
