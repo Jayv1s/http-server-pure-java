@@ -1,13 +1,14 @@
 package server;
 
 import enums.HttpContentTypeEnum;
+import enums.HttpStatusEnum;
 import http.HttpRequest;
 import http.HttpResponse;
-import enums.HttpStatusEnum;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ConnectionHandler {
     Socket clientSocket;
@@ -40,7 +41,7 @@ public class ConnectionHandler {
                         .build();
 
                 try(OutputStream outputStream = clientSocket.getOutputStream()) {
-                    outputStream.write(response.getResponse().getBytes());
+                    outputStream.write(response.getResponse().getBytes(StandardCharsets.UTF_8));
                     outputStream.flush();
                 }
 
@@ -63,7 +64,7 @@ public class ConnectionHandler {
                 .build();
 
         try(OutputStream outputStream = clientSocket.getOutputStream()) {
-            outputStream.write(response.getResponse().getBytes());
+            outputStream.write(response.getResponse().getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         }
     }
@@ -81,7 +82,7 @@ public class ConnectionHandler {
                 .build();
 
         try(OutputStream outputStream = clientSocket.getOutputStream()) {
-            outputStream.write(response.getResponse().getBytes());
+            outputStream.write(response.getResponse().getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         }
     }
@@ -100,7 +101,7 @@ public class ConnectionHandler {
                 .build();
 
         try(OutputStream outputStream = clientSocket.getOutputStream()) {
-            outputStream.write(response.getResponse().getBytes());
+            outputStream.write(response.getResponse().getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         }
     }
@@ -117,7 +118,7 @@ public class ConnectionHandler {
                 .build();
 
         try(OutputStream outputStream = clientSocket.getOutputStream()) {
-            outputStream.write(response.getResponse().getBytes());
+            outputStream.write(response.getResponse().getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         }
     }
