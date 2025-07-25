@@ -1,10 +1,7 @@
 import server.HttpServer;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class Main {
     /*
@@ -69,7 +66,7 @@ public class Main {
 
     * GET on port 8080 using cURL:  curl http://localhost:8080/ (the Header "host" is automatically add by cURL - but if need to add manually: curl http://localhost:8080/ -H "Host: localhost:8080"
     * */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         HttpServer.startServer();
         System.out.println("Hello, World!");
     }

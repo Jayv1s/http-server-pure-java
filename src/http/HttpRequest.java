@@ -73,4 +73,8 @@ public class HttpRequest {
     public String getBody() {
         return this.body;
     }
+
+    public HashMap<String, String> getHeaders() {
+        return this.headers;
+    }
 }

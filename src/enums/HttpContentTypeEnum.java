@@ -13,4 +13,8 @@ public enum HttpContentTypeEnum {
     String getMediaType() {
         return this.mediaType;
     }
+
+    public static boolean isJSON(String type) {
+        return JSON.getMediaType().equals(type);
+    }
 }
